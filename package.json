@@ -1,0 +1,48 @@
+{
+  "name": "decision-engine-client",
+  "version": "0.1.0",
+  "description": "client library for decision engine integration",
+  "author": "Kateryna",
+  "main": "dist/umd/decisionEngineClient.js",
+  "module": "dist/mjs/decisionEngineClient.mjs",
+  "files": [
+    "dist/umd",
+    "dist/mjs",
+    "dist/typings/"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "start": "rollup -c --watch --environment SERVE:true",
+    "build": "npm run typegen && npm run test && rollup -c",
+    "test": "jest plugin.test.ts",
+    "typegen": "tsc --declaration --noEmit false --outDir dist/typings/ --emitDeclarationOnly --declarationMap",
+    "prepublish": "npm run typegen && npm run test && rollup -c --silent"
+  },
+  "keywords": [
+    "mlops"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-private-methods": "^7.18.6",
+    "@babel/plugin-transform-async-to-generator": "^7.24.1",
+    "@babel/plugin-transform-regenerator": "^7.24.1",
+    "@babel/plugin-transform-runtime": "^7.24.3",
+    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-typescript": "^7.24.1",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@types/jest": "^26.0.24",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "babel-eslint": "^10.1.0",
+    "jest": "^26.6.3",
+    "rollup": "^2.79.1",
+    "rollup-plugin-eslint": "^7.0.0",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^1.1.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.9.5"
+  }
+}
