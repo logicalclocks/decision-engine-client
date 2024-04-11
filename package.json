@@ -2,7 +2,16 @@
   "name": "decision-engine-client",
   "version": "0.1.0",
   "description": "client library for decision engine integration",
-  "author": "Kateryna",
+  "author": {
+    "name": "Ehsan Heydari",
+    "url": "https://github.com/ehsan-github"
+  },
+  "contributors": [
+    {
+      "name": "Kateryna",
+      "url": "https://github.com/KHerashchenko"
+    }
+  ],
   "main": "dist/umd/decisionEngineClient.js",
   "module": "dist/mjs/decisionEngineClient.mjs",
   "files": [
