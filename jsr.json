@@ -1,5 +1,5 @@
 {
-  "name": "@ehsan/decision-engin-client",
+  "name": "@ehsan/decision-engine-client",
   "version": "1.0.0",
   "exports": "./src/index.ts"
 }
