@@ -143,7 +143,9 @@ export class DecisionEngineClient {
     const data = {
       instances: [
         [
-          {
+          {            
+            de_name: this.options.decisionEngineName,
+            project_id: this.options.projectId,
             decision_id: Math.floor(Math.random() * 100000),
             session_id: context.sessionId, 
             context_item_ids: Array.from(this.clickedItemIds),
