@@ -16,4 +16,5 @@ export type AppContext = {
   longitude: number;
   language: string;
   useragent: typeof navigator.userAgent;
+  sessionId: string;
 };

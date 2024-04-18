@@ -5,6 +5,7 @@ export type { Options, EventDetails, AppContext };
 export class DecisionEngineClient {
   options: Options;
   clickedItemIds: Set<string | number>;
+  sessionId: string;
 
   constructor(options: Options) {
     if (!options.apiKey || typeof options.apiKey !== "string") {
@@ -21,11 +22,11 @@ export class DecisionEngineClient {
       serviceUrl: options.serviceUrl,
     };
 
+    this.sessionId = this.generateUUID(); // Generate a session ID that persists for the instance
     // Load clicked item IDs from localStorage or initialize to an empty set
     const savedClickedItemIds =
       JSON.parse(localStorage.getItem("clickedItemIds") || "[]") || [];
     this.clickedItemIds = new Set(savedClickedItemIds);
-
     this.getRecommendations = this.getRecommendations.bind(this);
     this.getAppContext = this.getAppContext.bind(this);
     this.handleProductClick = this.handleProductClick.bind(this);
@@ -49,6 +50,13 @@ export class DecisionEngineClient {
     console.log("Event details:", eventDetails);
   }
 
+  generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
   getAppContext(): Promise<AppContext> {
     return new Promise((resolve, reject) => {
       if ("geolocation" in navigator) {
@@ -59,6 +67,7 @@ export class DecisionEngineClient {
               longitude: position.coords.longitude,
               language: navigator.language,
               useragent: navigator.userAgent,
+              sessionId: this.sessionId,
             });
           },
           (error) => {
@@ -83,15 +92,20 @@ export class DecisionEngineClient {
       "Content-Type": "application/json",
     };
 
+    const currentDate = new Date();
+    const timestamp = currentDate.toISOString(); // Format as ISO string
+    const eventId = Math.floor(Math.random() * 100000); // Generate a random event ID
+  
     const body = {
       instances: [
         {
-          event_id: 1,
-          session_id: "352e0211-4938-41cd-bb26-ca3269671c48",
-          event_timestamp: "2024-03-04 15:28:49",
+          event_id: eventId,
+          session_id: context.sessionId, 
+          event_timestamp: timestamp, 
           item_id: eventDetails.id,
           event_type: eventDetails.event_type,
           event_value: eventDetails.event_value,
+          event_weight: 1,
           longitude: context.longitude,
           latitude: context.latitude,
           language: context.language,
@@ -126,14 +140,14 @@ export class DecisionEngineClient {
       /_/g,
       ""
     )}querydeployment:predict`;
-    // const requestID = Date.now().toString();
-    const requestID = 0;
     const data = {
       instances: [
         [
-          {
+          {            
+            de_name: this.options.decisionEngineName,
+            decision_id: Math.floor(Math.random() * 100000),
+            session_id: context.sessionId, 
             context_item_ids: Array.from(this.clickedItemIds),
-            // context_item_ids: ["114428030", "120129014", "153115019"],
             longitude: context.longitude,
             latitude: context.latitude,
             language: context.language,
@@ -160,7 +174,6 @@ export class DecisionEngineClient {
         return response.json();
       })
       .then((responseData) => {
-        responseData.request_id = requestID;
         return responseData;
       });
   }
